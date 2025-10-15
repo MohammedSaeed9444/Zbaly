@@ -8,7 +8,15 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+// Configure CORS for the frontend domain
+app.use(cors({
+  origin: [
+    'https://create-react-app-site-production-f52a.up.railway.app',
+    'http://localhost:3000' // For local development
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes

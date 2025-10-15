@@ -16,8 +16,13 @@ echo "Using port: $PORT"
 # Install dependencies
 npm ci
 
-# Build the React app
-CI=false npm run build
+# Set API URL for the frontend
+export REACT_APP_API_URL=https://zbaly-production.up.railway.app
+echo "Using API URL: $REACT_APP_API_URL"
+
+# Build the React app with environment variables
+echo "Building React app..."
+REACT_APP_API_URL=$REACT_APP_API_URL CI=false npm run build
 
 # Serve the built app
 echo "Starting server on port $PORT"

@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Install curl and Node.js
+apt-get update
+apt-get install -y curl
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+apt-get install -y nodejs
+
+# Verify installations
+node --version
+npm --version
+
 # Install dependencies for backend
 cd backend
 npm install

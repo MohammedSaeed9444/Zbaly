@@ -1,9 +1,16 @@
 #!/bin/bash
 
+set -e  # Exit on error
+
+echo "Starting deployment process..."
+
 # Install Node.js
-apt-get update && apt-get install -y curl
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-apt-get install -y nodejs
+echo "Installing Node.js..."
+if ! command -v node &> /dev/null; then
+    apt-get update && apt-get install -y curl
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+    apt-get install -y nodejs
+fi
 
 # Print versions
 echo "Node version: $(node --version)"
@@ -13,17 +20,22 @@ echo "NPM version: $(npm --version)"
 export PORT=${PORT:-3000}
 echo "Using port: $PORT"
 
-# Install dependencies
-npm ci
-
 # Set API URL for the frontend
-export REACT_APP_API_URL=https://zbaly-production.up.railway.app
+export REACT_APP_API_URL=${REACT_APP_API_URL:-"https://zbaly-production.up.railway.app"}
 echo "Using API URL: $REACT_APP_API_URL"
 
-# Build the React app with environment variables
-echo "Building React app..."
-REACT_APP_API_URL=$REACT_APP_API_URL CI=false npm run build
+# Clean install dependencies
+echo "Installing dependencies..."
+npm ci --production
 
-# Serve the built app
-echo "Starting server on port $PORT"
-npx serve -s build -l $PORT
+# Build the React app
+echo "Building React app..."
+CI=false GENERATE_SOURCEMAP=false npm run build
+
+# Install serve
+echo "Installing serve..."
+npm install -g serve
+
+# Start the server
+echo "Starting server on port $PORT..."
+exec serve -s build -l $PORT

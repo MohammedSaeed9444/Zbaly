@@ -18,12 +18,13 @@
     "express-validator": "^7.0.1"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.15",
-    "@types/express": "^4.17.20",
-    "@types/node": "^20.8.6",
+    "@types/cors": "^2.8.14",
+    "@types/express": "^4.17.19",
+    "@types/node": "^20.8.4",
     "nodemon": "^3.0.1",
     "prisma": "^5.4.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "wait-port": "^1.0.4"
   }
 }

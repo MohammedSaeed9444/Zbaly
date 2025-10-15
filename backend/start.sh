@@ -20,13 +20,25 @@ npm ci
 echo "Building TypeScript..."
 npm run build
 
+# Set up database URL
+if [ -z "$DATABASE_URL" ]; then
+  export DATABASE_URL="postgresql://postgres:mainline.proxy.rlwy.net:5432/railway"
+  echo "Using default DATABASE_URL"
+else
+  echo "Using provided DATABASE_URL"
+fi
+
+# Wait for database to be ready
+echo "Waiting for database to be ready..."
+npx wait-port ${DATABASE_URL#*://} -t 60000
+
 # Generate Prisma client
 echo "Generating Prisma client..."
 npx prisma generate
 
 # Run database migrations
 echo "Running database migrations..."
-npx prisma migrate deploy
+DATABASE_URL=$DATABASE_URL npx prisma migrate deploy
 
 # Start the server
 echo "Starting server on port $PORT"
